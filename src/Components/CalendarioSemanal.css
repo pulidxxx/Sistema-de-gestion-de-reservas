@@ -1,0 +1,624 @@
+/* CalendarioSemanal - Modern Minimalistic Styles */
+
+.calendario-semanal {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 20px 60px rgba(79, 172, 254, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendario-semanal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  z-index: 1;
+}
+
+.calendario-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 32px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.titulo-seccion {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.calendario-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.titulo-info h2 {
+  margin: 0 0 4px 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.espacio-nombre {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.9;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.fecha-rango {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+}
+
+.fecha-icon {
+  font-size: 18px;
+}
+
+.fecha-texto {
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.navegacion-semana {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 14px 24px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(20px);
+}
+
+.nav-btn:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.nav-icon {
+  font-size: 16px;
+}
+
+.calendario-body {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #4facfe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.loading-content p {
+  margin: 0;
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: 150px repeat(6, 1fr);
+  gap: 2px;
+  background: #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.grid-header {
+  display: contents;
+}
+
+.horario-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.header-icon {
+  font-size: 18px;
+}
+
+.dia-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.dia-nombre {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dia-fecha {
+  font-size: 12px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.grid-body {
+  display: contents;
+}
+
+.horario-fila {
+  display: contents;
+}
+
+.horario-slot {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.hora-inicio,
+.hora-fin {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.hora-separator {
+  color: #718096;
+  font-weight: 400;
+}
+
+.slot {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 80px;
+  text-align: center;
+}
+
+.slot-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.slot-text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.slot.disponible {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border-color: #48bb78;
+}
+
+.slot.disponible:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+}
+
+.slot.ocupado {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+  border-color: #f56565;
+  cursor: not-allowed;
+}
+
+.slot.pasado {
+  background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+  color: white;
+  border-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.calendario-leyenda {
+  margin-top: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  border-radius: 16px;
+  border: 2px solid #e2e8f0;
+}
+
+.calendario-leyenda h4 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-align: center;
+}
+
+.leyenda-items {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.leyenda-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.leyenda-item.disponible .leyenda-color {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.leyenda-item.ocupado .leyenda-color {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+.leyenda-item.pasado .leyenda-color {
+  background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+}
+
+.calendario-error {
+  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+  border-radius: 24px;
+  padding: 60px 32px;
+  text-align: center;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 32px rgba(245, 101, 101, 0.2);
+}
+
+.error-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.error-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #c53030;
+}
+
+.error-content p {
+  margin: 0 0 24px 0;
+  font-size: 16px;
+  color: #9c4221;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, #c53030 0%, #9c4221 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(197, 48, 48, 0.3);
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(197, 48, 48, 0.4);
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .horarios-grid {
+    grid-template-columns: 120px repeat(6, 1fr);
+  }
+
+  .horario-slot {
+    padding: 12px 8px;
+  }
+
+  .slot {
+    padding: 12px 8px;
+    min-height: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendario-semanal {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .calendario-body {
+    padding: 20px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .titulo-info h2 {
+    font-size: 28px;
+  }
+
+  .navegacion-semana {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-btn {
+    padding: 12px 20px;
+    justify-content: center;
+  }
+
+  .horarios-grid {
+    grid-template-columns: 100px repeat(3, 1fr);
+    gap: 1px;
+  }
+
+  /* Hide some days on mobile */
+  .dia-header:nth-child(n + 5),
+  .slot:nth-child(4n + 5),
+  .slot:nth-child(4n + 6),
+  .slot:nth-child(4n + 7) {
+    display: none;
+  }
+
+  .leyenda-items {
+    gap: 16px;
+  }
+
+  .leyenda-item {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendario-semanal {
+    padding: 20px 16px;
+    margin-bottom: 24px;
+  }
+
+  .titulo-seccion {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .titulo-info h2 {
+    font-size: 24px;
+  }
+
+  .fecha-rango {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .horarios-grid {
+    grid-template-columns: 80px repeat(2, 1fr);
+  }
+
+  /* Show only first 3 days on very small screens */
+  .dia-header:nth-child(n + 4),
+  .slot:nth-child(3n + 4),
+  .slot:nth-child(3n + 5),
+  .slot:nth-child(3n + 6),
+  .slot:nth-child(3n + 7) {
+    display: none;
+  }
+
+  .slot-text {
+    font-size: 12px;
+  }
+
+  .calendario-leyenda {
+    padding: 20px;
+  }
+
+  .leyenda-items {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .calendario-body {
+    background: rgba(45, 55, 72, 0.95);
+    color: white;
+  }
+
+  .horario-slot {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #f7fafc;
+  }
+
+  .slot {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #f7fafc;
+  }
+
+  .calendario-leyenda {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border-color: #4a5568;
+    color: white;
+  }
+
+  .loading-content h3 {
+    color: #f7fafc;
+  }
+
+  .loading-content p {
+    color: #cbd5e0;
+  }
+}
+
+/* Animation for grid appearance */
+.horarios-grid {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects for better interactivity */
+.slot:not(.ocupado):not(.pasado):hover {
+  transform: scale(1.05);
+  z-index: 10;
+  position: relative;
+}
+
+.slot.disponible:active {
+  transform: scale(0.98);
+}
+
+/* Custom scrollbar for responsive tables */
+.calendario-body::-webkit-scrollbar {
+  height: 8px;
+}
+
+.calendario-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.calendario-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  border-radius: 10px;
+}
+
+.calendario-body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #3a93fc, #00d4fe);
+}
