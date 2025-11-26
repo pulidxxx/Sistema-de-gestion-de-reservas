@@ -3,7 +3,6 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import { Col, Card, Badge, Button } from "react-bootstrap";
 import { GeneralProvider } from "../Utils/GeneralContext";
-import Header from "../Classes/Header/Header";
 import FiltroGestionReservas from "../Components/FiltroGestionReservas";
 import "../Styles/Gestion.css";
 
@@ -12,6 +11,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function GestionReserva() {
   const [reservas, setReserva] = useState([]);
   const [filtros, setFiltros] = useState({ email: "", id: "", estado: "" });
+
+  // Modal states
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+  const [nuevoEstado, setNuevoEstado] = useState("");
+  const [mostrarModalObs, setMostrarModalObs] = useState(false);
+  const [textoObs, setTextoObs] = useState("");
 
   const obtenerReservas = async () => {
     try {
@@ -40,6 +46,22 @@ function GestionReserva() {
     return coincideEmail && coincideId && coincideEstado;
   });
 
+  // Traducción de estados para mostrar y guardar
+  const mostrarEstado = (estado) => {
+    if (estado === "Activa" || estado === "activa") return "Activa";
+    if (estado === "Completada" || estado === "completada") return "Completada";
+    // Compatibilidad con datos antiguos
+    if (estado === "Entregado" || estado === "entregado") return "Activa";
+    if (estado === "Devuelto" || estado === "devuelto") return "Completada";
+    return estado;
+  };
+
+  const colorEstado = (estado) => {
+    if (mostrarEstado(estado) === "Activa") return "warning";
+    if (mostrarEstado(estado) === "Completada") return "success";
+    return "secondary";
+  };
+
   return (
     <GeneralProvider>
       <Container fluid className="align-items-center m-0 p-0 containerR">
@@ -62,7 +84,7 @@ function GestionReserva() {
             <h4 className="text-center">
               <strong>Instrucciones:</strong> Usa los filtros para buscar reservas por usuario, ID o estado.
             </h4>
-            <FiltroGestionReservas onFiltrosChange={setFiltros} />
+            <FiltroGestionReservas onFiltrosChange={setFiltros} estados={["Activa", "Completada"]} />
           </Col>
         </Row>
         <Row className="materiales-lista px-5">
@@ -106,13 +128,7 @@ function GestionReserva() {
                   </div>
                   <div style={{ marginTop: "10px" }}>
                     <Badge
-                      bg={
-                        reserva.estado === "Pendiente"
-                          ? "warning"
-                          : reserva.estado === "Entregado"
-                            ? "success"
-                            : "secondary"
-                      }
+                      bg={colorEstado(reserva.estado)}
                       style={{
                         fontSize: "0.95rem",
                         padding: "7px 16px",
@@ -121,14 +137,141 @@ function GestionReserva() {
                         textTransform: "uppercase"
                       }}
                     >
-                      {reserva.estado}
+                      {mostrarEstado(reserva.estado)}
                     </Badge>
                   </div>
                 </Card.Body>
+                <div className="text-center" style={{ paddingBottom: "20px" }}>
+                  {mostrarEstado(reserva.estado) !== "Completada" && (
+                    <Button
+                      variant="primary"
+                      style={{ width: "200px", boxShadow: "0 0 12px rgba(36, 63, 198, 0.51)" }}
+                      className="actualizarEstado"
+                      onClick={() => {
+                        setReservaSeleccionada(reserva);
+                        setNuevoEstado(mostrarEstado(reserva.estado));
+                        setMostrarModal(true);
+                      }}
+                    >
+                      Actualizar estado
+                    </Button>
+                  )}
+                  {mostrarEstado(reserva.estado) === "Completada" && (
+                    <Button
+                      variant="secondary"
+                      style={{ width: "200px", boxShadow: "0 0 12px rgba(94, 95, 97, 0.53)" }}
+                      className="observaciones"
+                      onClick={() => {
+                        setReservaSeleccionada(reserva);
+                        setTextoObs(reserva.observacionesEntrega || "");
+                        setMostrarModalObs(true);
+                      }}
+                    >
+                      Observaciones
+                    </Button>
+                  )}
+                </div>
               </Card>
             </Col>
           ))}
         </Row>
+        {/* Modal: Actualizar Estado */}
+        {mostrarModal && (
+          <div className="modalOverlay">
+            <div className="modalContent">
+              <h5 className="titleUp text-center">
+                Actualizar estado para la reserva #{reservaSeleccionada?.id}
+              </h5>
+              <select
+                value={nuevoEstado}
+                className="selectUp form-select"
+                onChange={(e) => setNuevoEstado(e.target.value)}
+              >
+                <option value="">Seleccione el estado</option>
+                <option value="activa">Activa</option>
+                <option value="completada">Completada</option>
+              </select>
+              <div className="mt-3 d-flex justify-content-evenly">
+                <Button variant="secondary" onClick={() => setMostrarModal(false)}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={async () => {
+                    try {
+                      // Guarda el estado como Activa/Completada
+                      const response = await fetch(
+                        `${API_BASE_URL}/reservas/${reservaSeleccionada.id}`,
+                        {
+                          method: "PATCH",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({ estado: nuevoEstado }),
+                        }
+                      );
+                      if (!response.ok) throw new Error("Error al actualizar el estado");
+                      await obtenerReservas();
+                      setMostrarModal(false);
+                      alert("Estado actualizado correctamente");
+                    } catch (error) {
+                      console.error("Error actualizando estado:", error);
+                      alert("Error al actualizar el estado: " + error);
+                    }
+                  }}
+                >
+                  Actualizar
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal: Observaciones */}
+        {mostrarModalObs && (
+          <div className="modalOverlay">
+            <div className="modalContent">
+              <h5 className="titleUpCom text-center">
+                Observaciones para la reserva #{reservaSeleccionada?.id}
+              </h5>
+              <textarea
+                className="form-control mt-3"
+                rows={4}
+                value={textoObs}
+                onChange={(e) => setTextoObs(e.target.value)}
+              />
+              <div className="mt-3 d-flex justify-content-evenly">
+                <Button variant="secondary" onClick={() => setMostrarModalObs(false)}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(
+                        `${API_BASE_URL}/reservas/${reservaSeleccionada.id}`,
+                        {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ observacionesEntrega: textoObs }),
+                        }
+                      );
+                      if (!res.ok) throw new Error("Error guardando observación");
+                      await obtenerReservas();
+                      setMostrarModalObs(false);
+                      alert("Observación guardada correctamente");
+                    } catch (err) {
+                      console.error("Error guardando observación:", err);
+                      alert("Error guardando observación: " + err);
+                    }
+                  }}
+                >
+                  Guardar
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         <br />
         <br />
       </Container>

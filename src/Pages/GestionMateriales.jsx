@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import { Col, Card, Badge, Button } from "react-bootstrap";
 import { GeneralProvider } from "../Utils/GeneralContext";
-import FiltroGestionReservas from "../Components/FiltroGestionReservas";
+import FiltroGestionReservaMateriales from "../Components/FiltroGestionReservaMateriales";
 import "../Styles/Gestion.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -68,7 +68,7 @@ function GestionMateriales() {
             <h4 className="text-center">
               <strong>Instrucciones:</strong> Usa los filtros para buscar reservas de materiales por usuario, ID o estado.
             </h4>
-            <FiltroGestionReservas onFiltrosChange={setFiltros} />
+            <FiltroGestionReservaMateriales onFiltrosChange={setFiltros} />
           </Col>
         </Row>
         <Row className="materiales-lista px-5">

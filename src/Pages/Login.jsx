@@ -58,7 +58,7 @@ function Login() {
 
         if (res.ok) {
           const data = await res.json();
-          console.log(data);
+          // console.log(data);
 
           if (data.message) {
             setAlertText(data.message);
@@ -136,7 +136,7 @@ function Login() {
           <Image className="logoCentral" src="/logo.png" fluid width="22%" />
         </Form.Group>
         <Form onSubmit={handleFormSubmit} data-testid="Form">
-          <Form.Group className="mb-3" controlId="formTipoRegistro">
+          {/* <Form.Group className="mb-3" controlId="formTipoRegistro">
             <Form.Select 
               style={{ width: "325px" }}
               name="tipo"
@@ -150,7 +150,7 @@ function Login() {
               <option value="Externo">Externo</option>
               <option value="Laborista">Laborista</option>
             </Form.Select>
-          </Form.Group>
+          </Form.Group> */}
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Control

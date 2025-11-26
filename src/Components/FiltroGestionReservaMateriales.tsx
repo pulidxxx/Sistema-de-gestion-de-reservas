@@ -71,10 +71,9 @@ export default function FiltroGestionReservas({ onFiltrosChange }) {
             onChange={e => handleChange("estado", e.target.value)}
           >
             <option value="">Todos</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="activa">Activa</option>
-            <option value="completada">Completada</option>
-            <option value="cancelada">Cancelada</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Entregado">Entregado</option>
+            <option value="Devuelto">Devuelto</option>
           </select>
         </div>
         <div className="filter-actions">
