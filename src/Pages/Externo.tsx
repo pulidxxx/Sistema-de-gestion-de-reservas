@@ -76,7 +76,7 @@ const Externo: React.FC = () => {
     }
   };
 
-  function sleep(ms) {
+  function sleep(ms:any) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
@@ -120,7 +120,7 @@ const Externo: React.FC = () => {
           <h3 style={{marginBottom:"30px", textIndent:"7px"}}>Recursos Disponibles</h3>
           <div style={{ maxWidth: "90%", display:"block", margin: "auto" }}>
             <Row className="g-4">
-              {recursos.map((recurso) => (
+              {recursos.map((recurso: any) => (
                 <Col
                   key={recurso.id}
                   xs={6}

@@ -5,11 +5,11 @@ import ComponenteReserva from "../../Components/ComponenteReserva";
 import { useGeneral } from "../../Utils/GeneralContext";
 import "/src/Styles/Contenedor.css";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = (import.meta as any).env.VITE_API_BASE_URL;
 class ContenedorReservas extends Contenedor {
     render(): JSX.Element {
         const [reservas, setReservas] = useState<any[]>([]);
-        const { handleShow, setTipoReserva } = useGeneral();
+        const [handleShow, setTipoReserva] = useState<any>(null);
         const tipoDeCliente = localStorage.getItem("tipoUsuario");
         const email = localStorage.getItem("email");
 
@@ -32,9 +32,10 @@ class ContenedorReservas extends Contenedor {
             }
         };
 
-        const handleDelete = async (reserva) => {
+        const handleDelete = async (reserva: any) => {
+          console.log("Eliminar reserva:", reserva);
             const confirmDelete = window.confirm(
-                `¿Estás seguro de que quieres eliminar la reserva del espacio "${reserva.espacio.nombre}"?`
+                `¿Estás seguro de que quieres eliminar la reserva del espacio "${reserva.calendario.espacio.nombre}"?`
             );
             if (!confirmDelete) return;
 
@@ -61,19 +62,19 @@ class ContenedorReservas extends Contenedor {
         const handleCloseCalificar = () => setShow(false);
 
         const [reserva, setReserva] = useState<any>(null);
-        const handleShowCalificar = (reserva) => {
+        const handleShowCalificar = (reserva: any) => {
             setShow(true);
             setReserva(reserva);
         };
         const handleCloseCalificacion = () => setShowCalificacion(false);
-        const handleShowCalificacion = (reserva) => {
+        const handleShowCalificacion = (reserva: any) => {
             setShowCalificacion(true);
             setReserva(reserva);
         };
         const [calificacion, setCalificacion] = useState<number | null>(null);
         const [comentario, setComentario] = useState<string>("");
 
-        const handleCalificar = async (reserva, calificacion, comentario) => {
+        const handleCalificar = async (reserva: any, calificacion: number | null, comentario: string) => {
             try {
                 const response = await fetch(
                     `${API_BASE_URL}/reservas/calificar/${reserva.id}`,
@@ -92,7 +93,7 @@ class ContenedorReservas extends Contenedor {
                     throw new Error("Error al calificar el espacio");
 
                 // Actualizar el estado del material
-                setReserva((prev) => {
+                setReserva((prev: any) => {
                     if (!prev) return null;
                     return { ...prev, calificacion, comentario };
                 });
